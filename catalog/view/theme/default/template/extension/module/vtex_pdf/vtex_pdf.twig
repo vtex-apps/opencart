@@ -1,0 +1,155 @@
+{% if (orders_iteration == 1) %}
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+    <tr>
+      <td align="left" valign="top">
+        {% if (store['config_logo']) %}
+          <a href="{{ order['store_url'] }}">
+            <img alt="" src="{{ store['config_logo'] }}" />
+          </a>
+        {% endif %}
+        {% if (store['config_title']) %}
+          <div><a href="{{ order['store_url'] }}"><b>{{ store['config_title'] }}</b></a></div>
+        {% endif %}
+      </td>
+      <td align="right" valign="top">
+        <b style="font-size: 120%;">{% if (order['store_url']) %}<a href="{{ order['store_url'] }}" style="text-decoration:none; color:#000000" target="_blank">{{ store['config_name'] }}</a>{% else %}{{ store['config_name'] }}{% endif %}</b>
+        {% if (store['config_address']) %}
+          <br />{{ store['config_address'] }}
+        {% endif %}
+        {% if (store['config_telephone']) %}
+          <br />{{ store['config_telephone'] }}
+        {% endif %}
+        {% if (store['config_email']) %}
+          <br /><a href="mailto:{{ store['config_email'] }}" style="text-decoration:none; color:#000000" target="_blank">{{ store['config_email'] }}</a>
+        {% endif %}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+{% endif %}
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody>
+  <tr>
+    <td height="8">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tbody>
+        <tr>
+          <td width="50%">
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tbody>
+              <tr>
+                <td width="90"><b>{{ text_date_added }}</b></td>
+                <td>{{ order['date_added'] }}</td>
+              </tr>
+              {% if (order['invoice_no']) %}
+                <tr>
+                  <td width="90"><b>{{ text_invoice_no }}</b></td>
+                  <td>{{ order['invoice_prefix'] ~ order['invoice_no'] }}</td>
+                </tr>
+              {% endif %}
+              <tr>
+                <td width="90"><b>{{ text_order_id }}</b></td>
+                <td>{{ order['order_id'] }}</td>
+              </tr>
+              {% if (order['custom_field'] is not empty) %}
+                {% for custom_field in order['custom_field'] %}
+                  {% if (custom_field['value']) %}
+                    <tr>
+                      <td width="90"><b>{{ custom_field['name'] }}:</b></td>
+                      <td>{{ custom_field['value'] }}</td>
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              </tbody>
+            </table>
+          </td>
+          <td width="50%">
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tbody>
+              {% if (order['order_status']) %}
+                <tr>
+                  <td width="120"><b>{{ text_order_status }}</b></td>
+                  <td>{{ order['order_status'] }}</td>
+                </tr>
+              {% endif %}
+              <tr>
+                <td width="120"><b>{{ text_payment_method }}</b></td>
+                <td>{{ order['payment_method'] }}</td>
+              </tr>
+              {% if (order['shipping_address']) %}
+                <tr>
+                  <td width="120"><b>{{ text_shipping_method }}</b></td>
+                  <td>{{ order['shipping_method'] }}</td>
+                </tr>
+              {% endif %}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  {% if (order['shipping_address'] or order['payment_address']) %}
+    <tr>
+      <td colspan="2" height="8">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table border="0" cellpadding="5" cellspacing="0" width="100%" style="border-collapse: collapse;">
+          <tbody>
+          <tr>
+            <td bgcolor="{{ config['module_pdf_invoice_color'] }}" style="border:0.7px solid #969696;line-height:15pt;font-size:9pt;color:#ffffff;text-align:center;"{% if (order['shipping_address']) %} width="50%"{% endif %}><b>{{ text_payment_address }}</b></td>
+            {% if (order['shipping_address']) %}
+              <td bgcolor="{{ config['module_pdf_invoice_color'] }}" style="border:0.7px solid #969696;line-height: 15pt; font-size:9pt;color:#ffffff;text-align:center;" width="50%"><b>{{ text_shipping_address }}</b></td>
+            {% endif %}
+          </tr>
+          <tr>
+            <td style="border:0.7px solid #969696;text-align:left;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+                <tr>
+                  <td>{{ order['payment_address'] }}</td>
+                </tr>
+                {% if (order['payment_custom_field'] is not empty) %}
+                  {% for custom_field in order['payment_custom_field'] %}
+                    {% if (custom_field['value']) %}
+                      <tr>
+                        <td><b>{{ custom_field['name'] }}</b> {{ custom_field['value'] }}</td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              </table>
+            </td>
+            {% if (order['shipping_address']) %}
+              <td width="50%" style="border:0.7px solid #969696;text-align:left;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+                  <tr>
+                    <td>{{ order['shipping_address'] }}</td>
+                  </tr>
+                  {% if (order['shipping_custom_field'] is not empty) %}
+                    {% for custom_field in order['shipping_custom_field'] %}
+                      {% if (custom_field['value']) %}
+                        <tr>
+                          <td><b>{{ custom_field['name'] }}</b> {{ custom_field['value'] }}</td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                </table>
+              </td>
+            {% endif %}
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  {% endif %}
+  </tbody>
+</table>
+<br />
